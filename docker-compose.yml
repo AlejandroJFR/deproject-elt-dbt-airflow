@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: de_postgres
+    environment:
+      POSTGRES_USER: de_user
+      POSTGRES_PASSWORD: de_password
+      POSTGRES_DB: de_warehouse
+    ports:
+      - "5432:5432"
+    volumes:
+      - de_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U de_user -d de_warehouse"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  de_postgres_data:
