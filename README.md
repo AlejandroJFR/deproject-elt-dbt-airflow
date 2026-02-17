@@ -52,9 +52,6 @@ Airflow (orchestration – future phase)
 
 ---
 
-
----
-
 ## Data Sources
 
 ### 1. Human Drug Adverse Events
