@@ -26,18 +26,18 @@ The goal is to simulate a real-world data engineering environment with:
 ## Architecture
 
 openFDA API (Human + Veterinary)
-↓
+ ->
 Python Ingestion Layer
-↓
-Postgres (raw schema)
-↓
-dbt (staging + marts)
-↓
-Postgres (analytics-ready)
-↓
-Power BI Dashboard
-↓
-Airflow (orchestration – future phase)
+ ->
+ Postgres (raw schema)
+ -> 
+ dbt (staging + marts)
+ ->
+ Postgres (analytics-ready)
+ ->
+ Power BI Dashboard
+ ->
+ Airflow (orchestration – future phase)
 
 ---
 
