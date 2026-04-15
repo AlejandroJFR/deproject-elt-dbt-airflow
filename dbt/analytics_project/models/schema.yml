@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: fct_vet_event_report 
+    description: "Fact table containing veterinary adverse event report data ."
+    columns:
+      - name: unique_aer_id_number
+        description: "Primary key defined as the unique identifier for each adverse event report."
+        tests:
+          - unique
+          - not_null
+  
+  - name: fct_vet_event_drug 
+    description: "Fact table containing drug information for each adverse event report."
+    columns:
+      - name: unique_aer_id_number
+        tests:
+          - not_null
+
+      - name: drug_seq
+        description: "Sequence number for each drug associated with an adverse event report."
+        tests:
+          - not_null
+
+  - name: fct_vet_event_reaction 
+    description: "Fact table containing reaction information for each adverse event report."
+    columns:
+      - name: unique_aer_id_number
+        tests:
+          - not_null
+
+      - name: reaction_seq
+        description: "Sequence number for each reaction associated with an adverse event report."
+        tests:
+          - not_null
