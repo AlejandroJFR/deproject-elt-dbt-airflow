@@ -2,24 +2,25 @@ import json
 from re import search
 import requests
 import psycopg2
-# from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+DB_CONFIG = {
+    "host": os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
+    "dbname": os.getenv("DB_NAME"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+}
 
 API_URL =  "https://api.fda.gov/animalandveterinary/event.json?"
 
-DB_CONFIG = {
-    "host": "localhost",
-    "port": 5432,
-    "dbname": "de_warehouse",
-    "user": "de_user",
-    "password": "de_password",
-}
-
 PIPELINE_NAME = "vet_ae_ingestion"
-MAX_PAGES = 3
-LIMIT = 5
+MAX_PAGES = 50
+LIMIT = 50
 
-# Get today's date and format it as YYYYMMDD
-# FORMATTED_DATE = datetime.today().strftime('%Y%m%d')
 
 def get_watermark(conn):
     cur = conn.cursor()
@@ -50,6 +51,7 @@ def update_watermark(conn, new_watermark):
 def fetch_vet_data(skip, limit, watermark):
     query = f"original_receive_date:[{watermark}+TO+20260106]"
     url = f"{API_URL}search={query}&limit={limit}&skip={skip}"
+    url = f"{API_URL}limit={limit}&skip={skip}"
    
     response = requests.get(url, timeout=30)
     response.raise_for_status()
@@ -79,6 +81,10 @@ def insert_vet_data_to_db(conn, vet_data):
         return inserted_rows
 
 def main():
+
+    if not DB_CONFIG["host"]:
+        raise ValueError("Missing DB_HOST environment variable")
+
     conn = psycopg2.connect(**DB_CONFIG)
 
     current_watermark = get_watermark(conn)
